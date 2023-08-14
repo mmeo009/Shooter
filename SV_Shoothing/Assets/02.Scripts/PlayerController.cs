@@ -2,14 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[System.Serializable]
+public class LimitedArea
+{
+    [Range(-8.5f, 5.5f)]
+    public float area_x;
+    [Range(-4.4f, 4.4f)]
+    public float area_y;
+}
+
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     public float moveSpeed;
     public Vector2 moveInput;
 
-    public Transform topLeft;
-    public Transform bottomRight;
+    public LimitedArea topLeft;
+    public LimitedArea bottomRight;
 
     private Animator anim;
     void Start()
@@ -24,8 +34,8 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("Movement", moveInput.y);
         rb.velocity = moveInput * moveSpeed;
 
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x,topLeft.position.x,bottomRight.position.x),
-                                                Mathf.Clamp(transform.position.y, bottomRight.position.y,topLeft.position.y),
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x,topLeft.area_x, bottomRight.area_x),
+                                                Mathf.Clamp(transform.position.y, bottomRight.area_y, topLeft.area_y),
                                                             transform.position.z);
     }
 }

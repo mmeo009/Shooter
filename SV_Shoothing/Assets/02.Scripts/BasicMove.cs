@@ -15,6 +15,5 @@ public class BasicMove : MonoBehaviour
     void Update()
     {
         rb.velocity = new Vector2(moveSpeed, 0);   
-        transform.rotation = 
     }
 }
