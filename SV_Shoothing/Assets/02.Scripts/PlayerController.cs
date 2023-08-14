@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     public LimitedArea bottomRight;
 
     private Animator anim;
+
+    public GameObject bullet;
+    public Transform firePos;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -31,11 +34,17 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        anim.SetFloat("Movement", moveInput.y);
         rb.velocity = moveInput * moveSpeed;
 
         transform.position = new Vector3(Mathf.Clamp(transform.position.x,topLeft.area_x, bottomRight.area_x),
-                                                Mathf.Clamp(transform.position.y, bottomRight.area_y, topLeft.area_y),
-                                                            transform.position.z);
+                                         Mathf.Clamp(transform.position.y, bottomRight.area_y, topLeft.area_y),
+                                         transform.position.z);
+
+        anim.SetFloat("Movement", moveInput.y);
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Instantiate(bullet, firePos.position, firePos.rotation);
+        }
     }
 }
