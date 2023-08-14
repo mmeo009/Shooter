@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -25,14 +26,19 @@ public class PlayerController : MonoBehaviour
 
     public GameObject bullet;
     public Transform firePos;
+
+    public float shotDelay;
+    private float ShotDelay;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        ShotDelay = shotDelay;
     }
 
     void Update()
     {
+        
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         rb.velocity = moveInput * moveSpeed;
 
@@ -42,9 +48,22 @@ public class PlayerController : MonoBehaviour
 
         anim.SetFloat("Movement", moveInput.y);
 
-        if (Input.GetButtonDown("Fire1"))
+        if(Input.GetButtonDown("Fire1"))
         {
-            Instantiate(bullet, firePos.position, firePos.rotation);
+            Fire();
         }
+        if (Input.GetButton("Fire1") && shotDelay > 0)
+        {
+            shotDelay -= Time.deltaTime;
+            if (shotDelay <= 0)
+            {
+                Fire();
+            }
+        }
+    }
+    public void Fire()
+    {
+        Instantiate(bullet, firePos.position, firePos.rotation);
+        shotDelay = ShotDelay;
     }
 }
